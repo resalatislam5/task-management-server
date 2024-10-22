@@ -60,6 +60,16 @@ async function run() {
       );
       res.status(200).json(task);
     });
+    // delete a task
+    app.delete("/api/tasks/:id", async (req, res) => {
+      const { id } = req.params;
+      const filter = { _id: new ObjectId(id) };
+
+      const deletedTask = await tasksCollection.deleteOne(filter);
+
+      res.status(200).json(deletedTask);
+    });
+
     console.log("connected db");
   } finally {
   }
