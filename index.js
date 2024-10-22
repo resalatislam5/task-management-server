@@ -8,7 +8,7 @@ require("dotenv").config();
 const cors = require("cors");
 const port = process.env.PORT || 5000;
 const morgan = require("morgan");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // use morgan in express
 app.use([express.json(), morgan("combined"), cors()]);
@@ -44,7 +44,22 @@ async function run() {
       const tasks = await cursor.toArray();
       res.status(200).json(tasks);
     });
-
+    // task update method
+    app.put("/api/tasks/:id", async (req, res) => {
+      const { id } = req.params;
+      const filter = { _id: new ObjectId(id) };
+      const value = req.body;
+      const options = { upsert: true };
+      const updatedValue = {
+        $set: value,
+      };
+      const task = await tasksCollection.updateOne(
+        filter,
+        updatedValue,
+        options
+      );
+      res.status(200).json(task);
+    });
     console.log("connected db");
   } finally {
   }
