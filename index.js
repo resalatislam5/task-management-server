@@ -29,6 +29,14 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
     const tasksCollection = client.db("task").collection("tasks");
+
+    // create a task
+    app.post("/api/tasks", async (req, res) => {
+      const { name, due_date, priority, tags } = req.body;
+      const newbody = { name, due_date, priority, tags };
+      const tasks = await tasksCollection.insertOne(newbody);
+      res.status(200).send(tasks);
+    });
   } finally {
   }
 }
