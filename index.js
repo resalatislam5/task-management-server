@@ -37,6 +37,15 @@ async function run() {
       const tasks = await tasksCollection.insertOne(newbody);
       res.status(200).send(tasks);
     });
+
+    // tasks get method
+    app.get("/api/tasks", async (_, res) => {
+      const cursor = tasksCollection.find({});
+      const tasks = await cursor.toArray();
+      res.status(200).json(tasks);
+    });
+
+    console.log("connected db");
   } finally {
   }
 }
