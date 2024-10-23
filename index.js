@@ -23,6 +23,7 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
+// TODO: vercel this API does not work
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
@@ -34,8 +35,8 @@ async function run() {
     });
     // create a task
     app.post("/api/tasks", async (req, res) => {
-      const { name, due_date, priority, tags } = req.body;
-      const newbody = { name, due_date, priority, tags };
+      const { name, due_date, priority, tag, description } = req.body;
+      const newbody = { name, due_date, priority, tag, description };
       const tasks = await tasksCollection.insertOne(newbody);
       res.status(200).send(tasks);
     });
